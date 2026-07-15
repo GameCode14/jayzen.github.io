@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jayzen - MyProfile</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Jayzen Godhigh<span>.</span></div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">HOME</a></li>
+                <li>    <a href="https://ezdn.app/jzgh" target="_blank" target="_blank" rel="noopen noreferer"  class="nav-item">SUPPORT</a></li>
+                <li>    <a href="https://www.tiktok.com/@stylereallife" target="_blank" rel="noopen noreferer"  class="nav-item">TIKTOK</a></li>
+                <li><a href="https://www.facebook.com/Karame45" target="_blank" rel="noopen noreferer"  class="nav-item">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h3 class="welcome-text">Welcome</h3>
+            <h1>Hello Everyone I'm <span>Jayzen Godhigh</span></h1>
+            <p class="description">
+                ฮายๆค้าบ ขอบคุณพี่ๆแชททุกคนที่สนับสนุนJayzen และติดตามกันมาตลอด
+                ขอบคุณที่เอ็นดูเด็กคนนี้ ขอบคุณที่ Support เด็กคนนี้ จะพยายามทำเต็มที่
+                จะเป็นคนที่น่ารักสำหรับพี่ๆแชททุกท่านและคนอื่นๆที่ได้รู้จัก
+
+            </p>
+    
+            <div class="hero-buttons">
+                <button class="btn hire-btn" id="like-btn" style="border: none; cursor: pointer;">
+                <i class="fas fa-heart" id="heart-icon"></i> Like <span id="like-count">1</span></button>
+            </div>
+        </div>
+
+       <div class="hero-image">
+            <div class="music-player-card">
+                <audio id="bg-music" src="song.mp3" loop></audio>
+
+                <div class="player-header">
+                    <span class="live-badge"><i class="fas fa-circle"></i> NOW PLAYING</span>
+                    <i class="fas fa-music note-icon"></i>
+                </div>
+
+                <div class="album-art-zone">
+                    <div class="album-disc">
+                        <img id="track-art" src="https://i.ytimg.com/vi/mGUjVbsYG6E/maxresdefault.jpg" alt="Music Cover">
+                    </div>
+                    
+                    <div class="visualizer-bars" id="visualizer">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+
+                <div class="track-details">
+                    <h3 id="track-title">No. 1 Party Anthem</h3>
+                    <p id="track-artist">Arctic Monkeys</p>
+                </div>
+
+                <div class="player-controls">
+                    <button class="control-btn" id="prev-btn"><i class="fas fa-step-backward"></i></button>
+                    <button class="control-btn play-btn" id="play-pause-btn"><i class="fas fa-play"></i></button>
+                    <button class="control-btn" id="next-btn"><i class="fas fa-step-forward"></i></button>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress"></div>
+                </div>
+            </div>
+        </div>
+            </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const music = document.getElementById("bg-music");
+        const playPauseBtn = document.getElementById("play-pause-btn");
+        const disc = document.querySelector(".album-disc");
+        const visualizer = document.getElementById("visualizer");
+        const progressBar = document.getElementById("progress");
+
+        // 1. ตั้งค่าเสียง "ไม่ต้องดังมาก" (ตั้งระดับไว้ที่ 0.15 หรือ 15% จากเต็ม 1.0)
+        music.volume = 0.15;
+
+        // ฟังก์ชันเมื่อเริ่มเล่นเพลง
+        function playTrack() {
+            music.play().then(() => {
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                disc.style.animationPlayState = "running";
+                visualizer.classList.add("playing");
+            }).catch(error => {
+                console.log("Autoplay บล็อกโดยเบราว์เซอร์ กำลังรอผู้ใช้โต้ตอบเพื่อเริ่มเล่นคิวต่อไป...");
+            });
+        }
+
+        // ฟังก์ชันเมื่อกดหยุดเพลง
+        function pauseTrack() {
+            music.pause();
+            playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            disc.style.animationPlayState = "paused";
+            visualizer.classList.remove("playing");
+        }
+
+        // ระบบพยายามเล่นเพลงอัตโนมัติทันทีที่เข้าหน้าเว็บ
+        playTrack();
+
+        // สำรองเผื่อเบราว์เซอร์บล็อกเพลง: เริ่มเล่นอัตโนมัติเมื่อลูกค้าคลิกหรือปัดเมาส์จุดแรก
+        const enableAutoPlay = () => {
+            playTrack();
+            document.removeEventListener("click", enableAutoPlay);
+            document.removeEventListener("keydown", enableAutoPlay);
+        };
+        document.addEventListener("click", enableAutoPlay);
+        document.addEventListener("keydown", enableAutoPlay);
+
+        // ควบคุมผ่านปุ่ม Play/Pause
+        playPauseBtn.addEventListener("click", function(e) {
+            e.stopPropagation(); // ป้องกันทับซ้อนการคลิกครั้งแรก
+            if (music.paused) {
+                playTrack();
+            } else {
+                pauseTrack();
+            }
+        });
+
+        // อัปเดตแถบเวลาวิ่งตามความก้าวหน้าเพลง
+        music.addEventListener("timeupdate", function() {
+            const percentage = (music.currentTime / music.duration) * 100;
+            progressBar.style.width = percentage + "%";
+        });
+    });
+   document.addEventListener("DOMContentLoaded", function () {
+    const likeBtn = document.getElementById("like-btn");
+    const heartIcon = document.getElementById("heart-icon");
+    const likeCountSpan = document.getElementById("like-count");
+
+    // 1. ดึงข้อมูลจำนวนไลก์และสถานะที่เคยเก็บไว้ในเครื่อง
+    let likeCount = parseInt(localStorage.getItem("user_like_count")) || 0;
+    let isLiked = localStorage.getItem("user_has_liked") === "true";
+
+    // 2. แสดงผลตามค่าที่บันทึกไว้ตั้งแต่ตอนโหลดหน้าเว็บเสร็จ
+    if (likeCountSpan) {
+        likeCountSpan.textContent = likeCount;
+    }
+
+    if (isLiked && heartIcon) {
+        heartIcon.className = "fas fa-heart";
+        heartIcon.style.color = "#ff4d4d"; 
+    }
+
+    // 3. ฟังก์ชันเมื่อกดคลิกปุ่ม Like
+    if (likeBtn && heartIcon && likeCountSpan) {
+        likeBtn.addEventListener("click", function () {
+            // ใส่เอฟเฟกต์เด้งเล็กน้อยเวลาคลิก
+            heartIcon.style.transform = "scale(1.25)";
+            setTimeout(() => {
+                heartIcon.style.transform = "scale(1)";
+            }, 0);
+
+            if (!isLiked) {
+                // เคส: กด Like
+                likeCount++;
+                isLiked = true;
+                
+                heartIcon.className = "fas fa-heart";
+                heartIcon.style.color = "#ff4d4d"; 
+            } else {
+                // เคส: กดยกเลิก Like
+                likeCount--;
+                isLiked = false;
+                
+                heartIcon.className = "fas fa-heart";
+                heartIcon.style.color = ""; // กลับเป็นสีเดิมของปุ่ม
+            }
+
+            // 4. บันทึกค่าใหม่ลงในเครื่องทันที
+            likeCountSpan.textContent = likeCount;
+            localStorage.setItem("user_like_count", likeCount);
+            localStorage.setItem("user_has_liked", isLiked);
+        });
+    }
+});
+</script> 
+
+
+</body>
+</html>
